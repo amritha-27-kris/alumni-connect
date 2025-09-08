@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alumni Connect</title>
+</head>
+<body>
+    <h1>Welcome to Alumni Connect</h1>
+    <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="#" onclick="fetchUsers()">View Users (Test API)</a></li>
+        <li><a href="#" onclick="fetchOpportunities()">View Opportunities (Test API)</a></li>
+    </ul>
+    <pre id="output"></pre>
+    <script>
+        async function fetchUsers() {
+            const res = await fetch('http://localhost:5000/api/users');
+            const data = await res.json();
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+        async function fetchOpportunities() {
+            const res = await fetch('http://localhost:5000/api/opportunities');
+            const data = await res.json();
+            document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>

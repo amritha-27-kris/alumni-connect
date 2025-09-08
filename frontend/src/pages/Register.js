@@ -1,69 +1,29 @@
 // src/pages/Register.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Register() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-  const navigate = useNavigate();
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
 
-  const handleChange = e => {
-    setFormData({...formData, [e.target.name]: e.target.value});
-  };
-
-  const handleSubmit = async e => {
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = e => {
     e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const data = await res.json();
-      if (data.success) {
-        alert('Registered successfully!');
-        navigate('/');
-      } else {
-        alert('Registration failed: ' + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error connecting to server');
-    }
+    alert('Registered! (Demo only)');
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-        />
-        <button type="submit" style={{ padding: '10px 20px' }}>Register</button>
+    <div className="App">
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: '30px auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <label>Name</label>
+        <input name="name" value={form.name} onChange={handleChange} required />
+        <label>Email</label>
+        <input type="email" name="email" value={form.email} onChange={handleChange} required />
+        <label>Password</label>
+        <input type="password" name="password" value={form.password} onChange={handleChange} required />
+        <button type="submit">Register</button>
       </form>
+      <p>Already have an account? <Link to="/">Login</Link></p>
     </div>
   );
 }

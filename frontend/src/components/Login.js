@@ -1,60 +1,56 @@
-// src/components/Login.js
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [form, setForm] = useState({ email: '', password: '' });
 
-  const handleSubmit = async (e) => {
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = e => {
     e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        alert('Login successful!');
-        navigate('/dashboard');
-      } else {
-        alert('Login failed: ' + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error connecting to server');
+    // TODO: Replace with actual backend authentication
+    if (form.email && form.password) {
+      alert('Login successful!');
+      navigate('/dashboard');
+    } else {
+      alert('Please enter email and password');
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-        />
-        <button type="submit" style={{ padding: '10px 20px' }}>Login</button>
-      </form>
-      <p style={{ marginTop: '15px' }}>
-        Don't have an account? <Link to="/register">Register here</Link>
-      </p>
-    </div>
+<div className="App">
+  <h1>Login</h1>
+  {/* src/components/Login.js */}
+  <form
+    onSubmit={handleSubmit}
+    style={{ maxWidth: '400px', margin: '30px auto', display: 'flex', flexDirection: 'column', gap: '10px' }}
+  >
+    <input
+      type="email"
+      name="email"
+      value={form.email}
+      onChange={handleChange}
+      required
+    />
+
+    <label>Password</label>
+    <input
+      type="password"
+      name="password"
+      value={form.password}
+      onChange={handleChange}
+      required
+    />
+
+    <button type="submit" style={{ marginTop: '10px' }}>Login</button>
+  </form>
+
+  <p style={{ marginTop: '15px' }}>
+    Don't have an account? <Link to="/register">Sign up</Link>
+  </p>
+</div>
+
   );
 }
 
