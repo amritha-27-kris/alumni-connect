@@ -1,4 +1,6 @@
-# config.py
-
-SQLALCHEMY_DATABASE_URI = "sqlite:///alumni_connect.db"  # Change to PostgreSQL/MySQL in production
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+DB_CONFIG = {
+    "host": "localhost",
+    "user": "root",         # change to your MySQL username
+    "password": "yourpass", # change to your MySQL password
+    "database": "alumni_connect"
+}
