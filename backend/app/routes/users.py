@@ -1,31 +1,34 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
+import mysql.connector
+from config import DB_CONFIG
 
-user_bp = Blueprint('user_bp', __name__)
+users_bp = Blueprint("users", __name__)
 
-# In-memory "database" for demo
-users_db = []
+def get_db_connection():
+    return mysql.connector.connect(**DB_CONFIG)
 
-@user_bp.route('/register', methods=['POST'])
-def register():
-    data = request.get_json()
-    name = data.get('name')
-    email = data.get('email')
-    password = data.get('password')
+@users_bp.route("/", methods=["GET"])
+def get_users():
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+    cursor.close()
+    db.close()
+    return jsonify(users)
 
-    if any(u['email'] == email for u in users_db):
-        return jsonify({"success": False, "message": "Email already exists"})
-    
-    users_db.append({"name": name, "email": email, "password": password})
-    return jsonify({"success": True, "message": "Registered successfully"})
-
-@user_bp.route('/login', methods=['POST'])
+@users_bp.route("/login", methods=["POST"])
 def login():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    data = request.json
+    email = data.get("email")
 
-    user = next((u for u in users_db if u['email'] == email and u['password'] == password), None)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+    user = cursor.fetchone()
+    cursor.close()
+    db.close()
+
     if user:
-        return jsonify({"success": True, "message": "Login successful"})
-    else:
-        return jsonify({"success": False, "message": "Invalid credentials"})
+        return jsonify({"success": True, "user": user})
+    return jsonify({"success": False, "message": "Invalid email"}), 401
