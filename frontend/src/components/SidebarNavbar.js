@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-function SidebarNavbar({ role }) {
+function SidebarNavbar({ role, onLogout }) {
   // Define nav items for each role
   const navItems = role === 'alumni'
     ? [
@@ -29,7 +29,8 @@ function SidebarNavbar({ role }) {
       flexDirection: 'column',
       alignItems: 'center',
       paddingTop: '20px',
-      gap: '20px'
+      gap: '20px',
+      position: 'relative'
     }}>
       {navItems.map(item => (
         <Link
@@ -63,6 +64,30 @@ function SidebarNavbar({ role }) {
           </span>
         </Link>
       ))}
+      
+      {/* Logout button at the bottom */}
+      <button
+        onClick={onLogout}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          color: 'white',
+          backgroundColor: '#dc3545',
+          border: 'none',
+          borderRadius: '10px',
+          width: '40px',
+          height: '40px',
+          fontSize: '20px',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        title="Logout"
+      >
+        🚪
+      </button>
+      
       <style>{`
         div a:hover .sidebar-label {
           opacity: 1;
